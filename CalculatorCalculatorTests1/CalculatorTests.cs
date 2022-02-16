@@ -45,5 +45,13 @@ namespace Calculator.Tests
             Assert.AreEqual(2, calculator.Subtract(3, 1));
             Assert.AreEqual(200, calculator.Subtract(212, 12));
         }
+
+        [TestMethod()]
+        public void GetPrimeTest()
+        {
+            Calculator calculator = new Calculator();
+            Assert.AreEqual(7, calculator.GetPrime(4));
+            Assert.AreEqual(97, calculator.GetPrime(25));
+        }
     }
 }
