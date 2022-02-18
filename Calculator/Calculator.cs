@@ -33,7 +33,7 @@ namespace Calculator
             return number;
         }
 
-        public void OutputResults(string answer, string type) //this function will output the result from the method to the console
+        public void OutputResults(string answer, string type) //this function will output the result from the method to the console, it will also write to a database
         {
             Console.WriteLine("The answer to the " + type + " method was " + answer);
             String tmp = "The answer to the " + type + " method was " + answer;
@@ -42,7 +42,6 @@ namespace Calculator
             String sql = "INSERT INTO Outputs (Result) VALUES (@Result)";
 
             SqlConnection con = new SqlConnection(ConnectionString);
-            //SqlCommand cmdInsert As New SqlCommand(Sqlstr, connection);
                       
             SqlCommand cmd = new SqlCommand(sql, con);
             con.Open();  
@@ -51,7 +50,7 @@ namespace Calculator
             con.Close();
         }
 
-        public int GetPrime(int position) {
+        public int GetPrime(int position) { //this function will accept the integer to get the nth position prime number
             int num = 1;
             int count = 0;
             //Console.Write("Number : ");
@@ -70,11 +69,11 @@ namespace Calculator
                     break;
                 }
             }
-            //Console.ReadKey();
+            
             return num;
         }
 
-        public static bool isPrime(int number)
+        public static bool isPrime(int number) //this function checks through numbers to get prime numbers 
         {
             int counter = 0;
             for (int j = 2; j < number; j++)

@@ -1,4 +1,5 @@
 using CalculatorAPI;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,33 +56,39 @@ app.Run();
 internal class calculator : ISimpleCalculator //I added the class here as I was unable to access the class in a seperate file
 {
     
-    public int Add(int start, int amount)
+    public int Add(int start, int amount) //the functions used by the api to return the results, it will also add the result to the database.
     {
-        return start + amount;
+        int tmp = start + amount;
+        OutputResults(tmp.ToString(), "add");
+        return tmp;
     }
        
     public float Divide(int start, float by)
     {
-        return start / by;
+        float tmp = start / by;
+        OutputResults(tmp.ToString(), "divide");
+        return tmp;
     }
 
     public int Multiply(int start, int by)
     {
-        return start * by;
+        int tmp = start* by;
+        OutputResults(tmp.ToString(), "multiply");
+        return tmp;
     }
 
     public int Subtract(int start, int amount)
     {
-        return start - amount;
+        int tmp = start - amount;
+        OutputResults(tmp.ToString(), "subtract");
+        return tmp;
     }
 
-    public int GetPrime(int position)
+    public int GetPrime(int position) //a function to return the position of the prime number based on the integer passed to it
     {
         int num = 1;
         int count = 0;
-        //Console.Write("Number : ");
         int n = position;
-        //Console.WriteLine();
         while (true)
         {
             num++;
@@ -95,11 +102,11 @@ internal class calculator : ISimpleCalculator //I added the class here as I was 
                 break;
             }
         }
-        //Console.ReadKey();
+        OutputResults(num.ToString(), "get prime");
         return num;
     }
 
-    private static bool isPrime(int number)
+    private static bool isPrime(int number) //this function checks through numbers to get prime numbers 
     {
         int counter = 0;
         for (int j = 2; j < number; j++)
@@ -118,5 +125,22 @@ internal class calculator : ISimpleCalculator //I added the class here as I was 
         {
             return false;
         }
+    }
+
+    public void OutputResults(string answer, string type) //this function will output the result from the method to the console
+    {
+        Console.WriteLine("The answer to the " + type + " method was " + answer);
+        String tmp = "The answer to the " + type + " method was " + answer;
+
+        String ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Users\\Wildheart\\Source\\Repos\\Calculator\\Calculator\\ResultsDB.mdf;Integrated Security=True";
+        String sql = "INSERT INTO Outputs (Result) VALUES (@Result)";
+
+        SqlConnection con = new SqlConnection(ConnectionString);
+
+        SqlCommand cmd = new SqlCommand(sql, con);
+        con.Open();
+        cmd.Parameters.AddWithValue("@Result", tmp);
+        cmd.ExecuteNonQuery();
+        con.Close();
     }
 }
