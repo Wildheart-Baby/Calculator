@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System.Data.SqlClient;
+
+namespace Calculator
 {
     public class Calculator : ISimpleCalculator, OutputResults
 
@@ -34,6 +36,19 @@
         public void OutputResults(string answer, string type) //this function will output the result from the method to the console
         {
             Console.WriteLine("The answer to the " + type + " method was " + answer);
+            String tmp = "The answer to the " + type + " method was " + answer;
+
+            String ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Users\\Wildheart\\Source\\Repos\\Calculator\\Calculator\\ResultsDB.mdf;Integrated Security=True";
+            String sql = "INSERT INTO Outputs (Result) VALUES (@Result)";
+
+            SqlConnection con = new SqlConnection(ConnectionString);
+            //SqlCommand cmdInsert As New SqlCommand(Sqlstr, connection);
+                      
+            SqlCommand cmd = new SqlCommand(sql, con);
+            con.Open();  
+            cmd.Parameters.AddWithValue("@Result", tmp);
+            cmd.ExecuteNonQuery();
+            con.Close();
         }
 
         public int GetPrime(int position) {
